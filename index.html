@@ -2,18 +2,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown to Our Date</title>
+  <title>Countdown to Our Love Date 💘</title>
   <style>
     body {
-      background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
-      color: #d63384;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
       font-family: 'Comic Sans MS', cursive, sans-serif;
       text-align: center;
-      padding: 50px;
+      background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
+      color: #d63384;
     }
     h1 {
       font-size: 2.5em;
-      margin-bottom: 20px;
+      margin-top: 60px;
     }
     .countdown {
       font-size: 2em;
@@ -33,24 +35,51 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
+    .falling-petals {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: url('https://i.imgur.com/o5pY8MJ.png') no-repeat center center;
+      background-size: contain;
+      animation: fall 10s linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
+  <audio autoplay loop hidden>
+    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
+  </audio>
+  <div class="falling-petals" id="petals"></div>
   <div class="hearts">💕 💖 💕</div>
   <h1>Countdown to Our Sweet Date 💘</h1>
   <div class="countdown" id="countdown"></div>
-  <div class="message">I can't wait to see you! 💞</div>  <script>
-    // Spotkanie: 25 lipca, 18:00 czasu tajskiego (UTC+7)
+  <div class="message" id="dailyMessage"></div>  <script>
     const targetDate = new Date("2025-07-25T18:00:00+07:00").getTime();
-
     const countdownEl = document.getElementById('countdown');
+    const dailyMessage = document.getElementById('dailyMessage');
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
       if (distance <= 0) {
-        countdownEl.innerHTML = "It's time! 💕";
+        countdownEl.innerHTML = "You're here... and so is my smile 💋";
+        dailyMessage.innerHTML = "Every second was worth the wait 💓";
         clearInterval(timer);
         return;
       }
@@ -61,9 +90,28 @@
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
       countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+      // daily messages
+      let msg = "I can't wait to see you! 💞";
+      if (days === 4) msg = "Only 4 days left... I wonder what you'll wear 🥰";
+      else if (days === 3) msg = "Just 3 days... butterflies are dancing in my chest 🦋";
+      else if (days === 2) msg = "Two days until your smile lights up everything 💫";
+      else if (days === 1) msg = "One more sleep. Just one. 💓";
+
+      dailyMessage.innerHTML = msg;
     }
 
     updateCountdown();
     const timer = setInterval(updateCountdown, 1000);
+
+    // Create falling petals
+    const petalsContainer = document.getElementById('petals');
+    for (let i = 0; i < 30; i++) {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
+      petalsContainer.appendChild(petal);
+    }
   </script></body>
 </html>
