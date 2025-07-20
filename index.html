@@ -1,117 +1,102 @@
 <!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Countdown to Our Love Date 💘</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Love Countdown</title>
   <style>
     body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
       margin: 0;
-      padding: 0;
+      background: linear-gradient(to right, #ffe6e6, #fff0f5);
       overflow: hidden;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      text-align: center;
-      background: linear-gradient(to bottom, #ffe6f0, #fff0f5);
-      color: #d63384;
     }
     h1 {
-      font-size: 2.5em;
-      margin-top: 60px;
+      font-size: 2.5rem;
+      color: #c0392b;
     }
-    .countdown {
-      font-size: 2em;
-      font-weight: bold;
-      margin-top: 20px;
+    #countdown {
+      font-size: 2rem;
+      margin: 20px;
     }
-    .message {
-      font-size: 1.5em;
-      margin-top: 40px;
-      color: #ff1493;
+    #dailyMessage {
+      font-size: 1.5rem;
+      text-align: center;
+      max-width: 600px;
+      color: #2c3e50;
     }
-    .hearts {
-      font-size: 2em;
-      animation: float 2s infinite ease-in-out;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-    .falling-petals {
+    .falling {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .petal {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background: url('https://i.imgur.com/o5pY8MJ.png') no-repeat center center;
-      background-size: contain;
+      top: -2em;
+      font-size: 1.5rem;
       animation: fall 10s linear infinite;
-      opacity: 0.7;
+      color: #e84393;
     }
     @keyframes fall {
-      to {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
         transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
       }
     }
   </style>
 </head>
 <body>
-  <audio autoplay loop hidden>
-    <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mp3">
-  </audio>
-  <div class="falling-petals" id="petals"></div>
-  <div class="hearts">💕 💖 💕</div>
-  <h1>Countdown to Our Sweet Date 💘</h1>
-  <div class="countdown" id="countdown"></div>
-  <div class="message" id="dailyMessage"></div>  <script>
-    const targetDate = new Date("2025-07-25T18:00:00+07:00").getTime();
-    const countdownEl = document.getElementById('countdown');
-    const dailyMessage = document.getElementById('dailyMessage');
+  <h1>Countdown to Our First Date 💕</h1>
+  <div id="countdown"></div>
+  <div id="dailyMessage"></div>  <script>
+    const targetDate = new Date("2025-07-27T00:00:00").getTime();
+
+    const messages = [
+      "7 days left – I’m already imagining your smile. 💭",
+      "6 days – I wonder what you'll wear, but you'll be perfect anyway. 😍",
+      "5 days – My heart skips a beat every time I think about seeing you. ❤️",
+      "4 days – I’m getting butterflies already. 🦋",
+      "3 days – You’re the sweetest anticipation. 🍓",
+      "2 days – So close to holding your hand. 🤝",
+      "1 day – I won't sleep tonight thinking about you. 🌙",
+      "Today is the day – Let’s make it unforgettable. 💫"
+    ];
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance <= 0) {
-        countdownEl.innerHTML = "You're here... and so is my smile 💋";
-        dailyMessage.innerHTML = "Every second was worth the wait 💓";
-        clearInterval(timer);
-        return;
-      }
+      const days = Math.ceil(distance / (1000 * 60 * 60 * 24));
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById("countdown").innerHTML =
+        days > 0
+          ? `${days} day${days !== 1 ? "s" : ""} left until I see you.`
+          : days === 0
+          ? "It’s today! 💘"
+          : "We’ve already met! But I still think about you every day. 💌";
 
-      countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-      // daily messages
-      let msg = "I can't wait to see you! 💞";
-      if (days === 4) msg = "Only 4 days left... I wonder what you'll wear 🥰";
-      else if (days === 3) msg = "Just 3 days... butterflies are dancing in my chest 🦋";
-      else if (days === 2) msg = "Two days until your smile lights up everything 💫";
-      else if (days === 1) msg = "One more sleep. Just one. 💓";
-
-      dailyMessage.innerHTML = msg;
+      const msgIndex = 7 - days;
+      document.getElementById("dailyMessage").innerText =
+        msgIndex >= 0 && msgIndex < messages.length ? messages[msgIndex] : "";
     }
 
+    setInterval(updateCountdown, 1000);
     updateCountdown();
-    const timer = setInterval(updateCountdown, 1000);
 
-    // Create falling petals
-    const petalsContainer = document.getElementById('petals');
-    for (let i = 0; i < 30; i++) {
-      const petal = document.createElement('div');
-      petal.classList.add('petal');
-      petal.style.left = Math.random() * 100 + 'vw';
-      petal.style.animationDuration = (5 + Math.random() * 5) + 's';
-      petalsContainer.appendChild(petal);
+    // create falling hearts
+    const heartSymbols = ['💖', '💘', '💞', '🌹'];
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("falling");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
+      heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
     }
+    setInterval(createHeart, 300);
   </script></body>
 </html>
