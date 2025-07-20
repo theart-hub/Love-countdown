@@ -1,42 +1,57 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Love Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Love Countdown</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans&display=swap" rel="stylesheet" />
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      font-family: 'Open Sans', sans-serif;
+      color: #800040;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(to right, #ffe6e6, #fff0f5);
-      overflow: hidden;
+      text-align: center;
+      padding: 20px;
     }
     h1 {
-      font-size: 2.5rem;
-      color: #c0392b;
+      font-family: 'Great Vibes', cursive;
+      font-size: 4rem;
+      margin-bottom: 0.3em;
+      text-shadow: 2px 2px 8px rgba(255, 105, 180, 0.6);
     }
     #countdown {
       font-size: 2rem;
-      margin: 20px;
+      font-weight: 600;
+      background: rgba(255 255 255 / 0.4);
+      padding: 1em 2em;
+      border-radius: 1em;
+      box-shadow: 0 0 15px rgba(255 105 180 / 0.6);
+      margin-bottom: 1.5em;
+      min-width: 320px;
     }
     #dailyMessage {
-      font-size: 1.5rem;
-      text-align: center;
-      max-width: 600px;
-      color: #2c3e50;
+      font-style: italic;
+      font-size: 1.3rem;
+      max-width: 500px;
+      line-height: 1.5;
+      color: #660033;
+      margin-bottom: 2em;
     }
     .falling {
       position: fixed;
       top: -2em;
       font-size: 1.5rem;
       animation: fall 10s linear infinite;
-      color: #e84393;
+      opacity: 0.85;
+      user-select: none;
+      pointer-events: none;
     }
     @keyframes fall {
       0% {
@@ -51,54 +66,54 @@
   </style>
 </head>
 <body>
-  <h1>Countdown to Our First Date 💕</h1>
+  <h1>Our First Meeting 💕</h1>
   <div id="countdown"></div>
-  <div id="dailyMessage"></div>  <script>
-    const targetDate = new Date("2025-07-27T00:00:00").getTime();
+  <div id="dailyMessage"></div>
+
+  <script>
+    const targetDate = new Date("2025-07-25T18:00:00+07:00").getTime();
 
     const messages = [
-      "7 days left – I’m already imagining your smile. 💭",
-      "6 days – I wonder what you'll wear, but you'll be perfect anyway. 😍",
-      "5 days – My heart skips a beat every time I think about seeing you. ❤️",
-      "4 days – I’m getting butterflies already. 🦋",
-      "3 days – You’re the sweetest anticipation. 🍓",
-      "2 days – So close to holding your hand. 🤝",
-      "1 day – I won't sleep tonight thinking about you. 🌙",
-      "Today is the day – Let’s make it unforgettable. 💫"
+      "In just five days, I’ll finally see the eyes behind the smile.",
+      "Four more days until I hear your real laugh.",
+      "Three days until the moment we've both been waiting for.",
+      "Two more sleeps before I meet the person from my dreams.",
+      "Just one day left — I wonder if your voice is as warm as your words.",
+      "Today’s the day. You’re not just a message anymore — you’re real."
     ];
 
+    const countdownEl = document.getElementById("countdown");
+    const messageEl = document.getElementById("dailyMessage");
+
     function updateCountdown() {
-      const now = new Date().getTime();
+      const now = Date.now();
       const distance = targetDate - now;
+      const daysLeft = Math.ceil(distance / (1000 * 60 * 60 * 24));
+      countdownEl.textContent = daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : "It's today! 💖";
 
-      const days = Math.ceil(distance / (1000 * 60 * 60 * 24));
+      let messageIndex = 5 - daysLeft;
+      if(messageIndex < 0) messageIndex = 0;
+      if(messageIndex >= messages.length) messageIndex = messages.length - 1;
 
-      document.getElementById("countdown").innerHTML =
-        days > 0
-          ? `${days} day${days !== 1 ? "s" : ""} left until I see you.`
-          : days === 0
-          ? "It’s today! 💘"
-          : "We’ve already met! But I still think about you every day. 💌";
-
-      const msgIndex = 7 - days;
-      document.getElementById("dailyMessage").innerText =
-        msgIndex >= 0 && msgIndex < messages.length ? messages[msgIndex] : "";
+      messageEl.textContent = daysLeft > 0 ? messages[messageIndex] : messages[messages.length - 1];
     }
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // create falling hearts
-    const heartSymbols = ['💖', '💘', '💞', '🌹'];
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.classList.add("falling");
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.animationDuration = 5 + Math.random() * 5 + "s";
-      heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 10000);
+    const symbols = ['💖', '🌹', '💕', '💘'];
+
+    function createFallingSymbol() {
+      const el = document.createElement('div');
+      el.className = 'falling';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (5 + Math.random() * 5) + 's';
+      el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 10000);
     }
-    setInterval(createHeart, 300);
-  </script></body>
+
+    setInterval(createFallingSymbol, 300);
+  </script>
+</body>
 </html>
