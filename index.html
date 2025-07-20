@@ -86,16 +86,27 @@
     const messageEl = document.getElementById("dailyMessage");
 
     function updateCountdown() {
-      const now = Date.now();
-      const distance = targetDate - now;
-      const daysLeft = Math.ceil(distance / (1000 * 60 * 60 * 24));
-      countdownEl.textContent = daysLeft > 0 ? `${daysLeft} day${daysLeft > 1 ? 's' : ''} left` : "It's today! 💖";
+  const now = Date.now();
+  const distance = targetDate - now;
 
-      let messageIndex = 5 - daysLeft;
-      if(messageIndex < 0) messageIndex = 0;
-      if(messageIndex >= messages.length) messageIndex = messages.length - 1;
+  if (distance <= 0) {
+    countdownEl.textContent = "It's today! 💖";
+    messageEl.textContent = messages[messages.length - 1];
+    return;
+  }
 
-      messageEl.textContent = daysLeft > 0 ? messages[messageIndex] : messages[messages.length - 1];
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((distance / (1000 * 60)) % 60);
+  const seconds = Math.floor((distance / 1000) % 60);
+
+  countdownEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+  let messageIndex = 5 - days;
+  if (messageIndex < 0) messageIndex = 0;
+  if (messageIndex >= messages.length) messageIndex = messages.length - 1;
+
+  messageEl.textContent = messages[messageIndex];
     }
 
     setInterval(updateCountdown, 1000);
